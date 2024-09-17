@@ -63,7 +63,7 @@ fn stmt_to_ivlstmt(stmt: &Stmt) -> Result<IVLStmt> {
     match &stmt.kind {
         StmtKind::Assert { condition, .. } => 
             Ok(IVLStmt::assert(condition, "Assert might fail!")),
-        _ => bail!("Not supported.")
+        _ => todo!("Not supported (yet).")
     }
 }
 
@@ -72,6 +72,6 @@ fn wp(ivl: &IVLStmt, _: &Expr) -> Result<(Expr, String)> {
     match &ivl.kind {
         IVLStmtKind::Assert { condition, message } => 
             Ok((condition.clone(), message.clone())),
-        _ => bail!("Not supported."),
+        _ => todo!("Not supported (yet)."),
     }
 }
