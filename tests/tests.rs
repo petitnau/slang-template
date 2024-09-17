@@ -9,12 +9,12 @@ use std::collections::HashSet;
 datatest_stable::harness!(test_verifier, "tests", r"(.*).\.slang");
 fn test_verifier(_path: &Utf8Path, content: String) -> datatest_stable::Result<()> {
     let actual = slang_ui::test(App, &content).reports().iter()
-        .map(|x| Position::from_byte_offset(&content, x.span.start()).line)
+        .map(|x| Position::from_byte_offset(&content, x.span.start()).line + 1)
         .unique().sorted()
         .collect::<HashSet<_>>();
     let re = Regex::new(r"\s*//\s+(@CheckError)").unwrap();
     let expected = re.find_iter(&content)
-        .map(|c| Position::from_byte_offset(&content, c.start() + 1).line + 1)
+        .map(|c| Position::from_byte_offset(&content, c.start() + 2).line + 2)
         .unique().sorted()
         .collect::<HashSet<_>>();
     let extra_errors = actual.difference(&expected).collect::<HashSet<_>>();
