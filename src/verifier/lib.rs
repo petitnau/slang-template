@@ -1,6 +1,6 @@
-pub mod ivl0; mod ivl0_ext;
+pub mod ivl; mod ivl_ext;
 
-use ivl0::{IVL0Stmt, IVL0StmtKind};
+use ivl::{IVLStmt, IVLStmtKind};
 use slang::ast::{Expr, Stmt, StmtKind};
 use slang::smt::*;
 use slang_ui::prelude::*;
@@ -25,10 +25,10 @@ impl slang_ui::Hook for App {
 
             // Get method's body
             let stmt = &m.body.clone().unwrap().stmt;
-            // Encode it in IVL0
-            let ivl0 = stmt_to_ivl0stmt(&stmt)?;
+            // Encode it in IVL
+            let ivl = stmt_to_ivlstmt(&stmt)?;
             // Calculate obligation and error message (if obligation is not verified)
-            let (oblig, msg) = wp(&ivl0, &Expr::bool(true))?;
+            let (oblig, msg) = wp(&ivl, &Expr::bool(true))?;
             // Convert obligation to SMT expression
             let soblig = oblig.smt()?;
 
@@ -58,19 +58,19 @@ impl slang_ui::Hook for App {
     }
 }
 
-// Encoding of (assert-only) statements into IVL0 (for programs comprised of only a single assertion)
-fn stmt_to_ivl0stmt(stmt: &Stmt) -> Result<IVL0Stmt> {
+// Encoding of (assert-only) statements into IVL (for programs comprised of only a single assertion)
+fn stmt_to_ivlstmt(stmt: &Stmt) -> Result<IVLStmt> {
     match &stmt.kind {
         StmtKind::Assert { condition, .. } => 
-            Ok(IVL0Stmt::assert(condition, "Assert might fail!")),
+            Ok(IVLStmt::assert(condition, "Assert might fail!")),
         _ => bail!("Not supported.")
     }
 }
 
-// Weakest precondition of (assert-only) IVL0 programs comprised of a single assertion
-fn wp(ivl0: &IVL0Stmt, _: &Expr) -> Result<(Expr, String)> {
-    match &ivl0.kind {
-        IVL0StmtKind::Assert { condition, message } => 
+// Weakest precondition of (assert-only) IVL programs comprised of a single assertion
+fn wp(ivl: &IVLStmt, _: &Expr) -> Result<(Expr, String)> {
+    match &ivl.kind {
+        IVLStmtKind::Assert { condition, message } => 
             Ok((condition.clone(), message.clone())),
         _ => bail!("Not supported."),
     }
