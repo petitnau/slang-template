@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+datatest-stable = "0.2.9"
+itertools = "0.13.0"
+regex = "1.10.6"
 slang-ui = { git = "https://github.com/oembo-sse/slang" }
-# slang-ui = { path = "../slang/crates/slang-ui" }
 tokio = { version = "1.40.0", features = ["full"] }
