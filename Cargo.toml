@@ -1,0 +1,9 @@
+[package]
+name = "slang-template"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+slang-ui = { git = "https://github.com/oembo-sse/slang" }
+# slang-ui = { path = "../slang/crates/slang-ui" }
+tokio = { version = "1.40.0", features = ["full"] }
