@@ -1,4 +1,4 @@
-use verifier::App;
+use slang_template::App;
 
 #[tokio::main]
 async fn main() {

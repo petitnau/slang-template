@@ -1,9 +1,9 @@
 use datatest_stable::Utf8Path;
 use itertools::Itertools;
 use regex::Regex;
+use slang_template::App;
 use slang_ui::prelude::slang::Position;
 use std::collections::HashSet;
-use verifier::App;
 
 datatest_stable::harness!(test_verifier, "tests", r"(.*).\.slang");
 fn test_verifier(_path: &Utf8Path, content: String) -> datatest_stable::Result<()> {

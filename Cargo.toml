@@ -10,14 +10,6 @@ regex = "1.10.6"
 slang-ui = { git = "https://github.com/oembo-sse/slang" }
 tokio = { version = "1.40.0", features = ["full"] }
 
-[lib]
-name = "verifier"
-path = "src/verifier/lib.rs"
-
-[[bin]]
-name = "main"
-path = "src/main.rs"
-
 [[test]]
 name = "tests"
 harness = false
