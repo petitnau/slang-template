@@ -2,13 +2,13 @@ use slang::{ast::{Expr, Name, Type}, Span};
 use slang_ui::prelude::*;
 
 #[derive(Debug, Clone)]
-pub struct IVLStmt {
+pub struct IVLCmd {
     pub span: Span,
-    pub kind: IVLStmtKind,
+    pub kind: IVLCmdKind,
 }
 
 #[derive(Debug, Clone)]
-pub enum IVLStmtKind {
+pub enum IVLCmdKind {
     Assignment {
         name: Name,
         expr: Expr,
@@ -26,6 +26,6 @@ pub enum IVLStmtKind {
         message: String,
     },
 
-    Seq(Box<IVLStmt>, Box<IVLStmt>),
-    NonDet(Box<IVLStmt>, Box<IVLStmt>),
+    Seq(Box<IVLCmd>, Box<IVLCmd>),
+    NonDet(Box<IVLCmd>, Box<IVLCmd>),
 }
