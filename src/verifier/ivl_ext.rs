@@ -1,59 +1,75 @@
-use slang::{ast::{Expr, Name, Type}, Span};
+use slang::{
+    ast::{Expr, Name, Type},
+    Span,
+};
 use slang_ui::prelude::*;
 
 use crate::ivl::{IVLCmd, IVLCmdKind};
 
 impl IVLCmd {
-    pub(crate) fn assign(name: &Name, expr: &Expr) -> IVLCmd {
+    pub fn assign(name: &Name, expr: &Expr) -> IVLCmd {
         IVLCmd {
             span: Span::default(),
-            kind: IVLCmdKind::Assignment { name: name.clone(), expr: expr.clone() }
+            kind: IVLCmdKind::Assignment {
+                name: name.clone(),
+                expr: expr.clone(),
+            },
         }
     }
-    pub(crate) fn seq(&self, other: &IVLCmd) -> IVLCmd {
+    pub fn seq(&self, other: &IVLCmd) -> IVLCmd {
         IVLCmd {
             span: Span::default(),
-            kind: IVLCmdKind::Seq(Box::new(self.clone()), Box::new(other.clone()))
+            kind: IVLCmdKind::Seq(Box::new(self.clone()), Box::new(other.clone())),
         }
     }
-    pub(crate) fn seqs(cmds: &Vec<IVLCmd>) -> IVLCmd {
-        cmds.iter().cloned()
-        .reduce(|a, b| IVLCmd::seq(&a, &b))
-        .unwrap_or(IVLCmd::nop())
+    pub fn seqs(cmds: &[IVLCmd]) -> IVLCmd {
+        cmds.iter()
+            .cloned()
+            .reduce(|a, b| IVLCmd::seq(&a, &b))
+            .unwrap_or(IVLCmd::nop())
     }
-    pub(crate) fn nondet(&self, other: &IVLCmd) -> IVLCmd {
+    pub fn nondet(&self, other: &IVLCmd) -> IVLCmd {
         IVLCmd {
             span: Span::default(),
-            kind: IVLCmdKind::NonDet(Box::new(self.clone()), Box::new(other.clone()))
+            kind: IVLCmdKind::NonDet(Box::new(self.clone()), Box::new(other.clone())),
         }
     }
-    pub(crate) fn nondets(cmds: &Vec<IVLCmd>) -> IVLCmd {
-        cmds.iter().cloned()
+    pub fn nondets(cmds: &[IVLCmd]) -> IVLCmd {
+        cmds.iter()
+            .cloned()
             .reduce(|a, b| IVLCmd::nondet(&a, &b))
             .unwrap_or(IVLCmd::unreachable())
     }
-    pub(crate) fn assume(condition: &Expr) -> IVLCmd {
+    pub fn assume(condition: &Expr) -> IVLCmd {
         IVLCmd {
             span: Span::default(),
-            kind: IVLCmdKind::Assume { condition: condition.clone() }
+            kind: IVLCmdKind::Assume {
+                condition: condition.clone(),
+            },
         }
     }
-    pub(crate) fn assert(condition: &Expr, message: &str) -> IVLCmd {
+    pub fn assert(condition: &Expr, message: &str) -> IVLCmd {
         IVLCmd {
             span: Span::default(),
-            kind: IVLCmdKind::Assert { condition: condition.clone(), message: message.to_owned() },
+            kind: IVLCmdKind::Assert {
+                condition: condition.clone(),
+                message: message.to_owned(),
+            },
         }
     }
-    pub(crate) fn havoc(name: &Name, ty: &Type) -> IVLCmd {
+    pub fn havoc(name: &Name, ty: &Type) -> IVLCmd {
         IVLCmd {
-            kind: IVLCmdKind::Havoc { name: name.clone(), ty: ty.clone() },
-            span: Span::default()
+            kind: IVLCmdKind::Havoc {
+                name: name.clone(),
+                ty: ty.clone(),
+            },
+            span: Span::default(),
         }
     }
-    pub(crate) fn nop() -> IVLCmd {
+    pub fn nop() -> IVLCmd {
         IVLCmd::assume(&Expr::bool(true))
     }
-    pub(crate) fn unreachable() -> IVLCmd {
+    pub fn unreachable() -> IVLCmd {
         IVLCmd::assume(&Expr::bool(false))
     }
 }
